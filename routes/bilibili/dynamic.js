@@ -1,6 +1,5 @@
 const axios = require('../../utils/axios');
 const JSONbig = require('json-bigint');
-const config = require('../../config');
 
 module.exports = async (ctx) => {
     const uid = ctx.params.uid;
@@ -9,7 +8,6 @@ module.exports = async (ctx) => {
         method: 'get',
         url: `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}`,
         headers: {
-            'User-Agent': config.ua,
             Referer: `https://space.bilibili.com/${uid}/`,
         },
         transformResponse: [(data) => data],
@@ -43,11 +41,7 @@ module.exports = async (ctx) => {
                 link = `https://www.bilibili.com/video/av${data.aid}`;
             } else if (data.video_playurl) {
                 link = `https://vc.bilibili.com/video/${data.id}`;
-            } else if (data.id) {
-                link = `https://h.bilibili.com/${data.id}`;
-            } else if (data.rp_id && item.desc && item.desc.dynamic_id) {
-                link = `https://t.bilibili.com/${item.desc.dynamic_id}`;
-            } else if (data.sketch && data.sketch.sketch_id && item.desc && item.desc.dynamic_id) {
+            } else if (item.desc && item.desc.dynamic_id) {
                 link = `https://t.bilibili.com/${item.desc.dynamic_id}`;
             }
 
